@@ -87,7 +87,8 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.number"
+                      disabled
+                      v-model="editedItem.friendIds.length"
                       label="Количество друзей"
                     ></v-text-field>
                   </v-col>
@@ -169,7 +170,7 @@ export default {
         { text: 'Имя', value: 'name' },
         { text: 'Отчество', value: 'patronymic' },
         { text: 'Email', value: 'email' },
-        { text: 'Количество друзей', value: 'number' },
+        { text: 'Количество друзей', value: 'friendIds.length' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       users: [],
@@ -179,14 +180,14 @@ export default {
         name: '',
         patronymic: '',
         email: '',
-        number: 0,
+        friendIds: [],
       },
       defaultItem: {
         lastName: '',
         name: '',
         patronymic: '',
         email: '',
-        number: 0,
+        friendIds: [],
       },
     }),
 
@@ -216,32 +217,36 @@ export default {
       initialize () {
         this.users = [
           {
+            id: 'user-1',
             lastName: 'Kirillov',
             name: 'Alex',
             patronymic: 'Vladimirovich',
             email: 'alexkirillof@yandex.ru',
-            number: 5,
+            friendIds: [],
           },
           {
+            id: 'user-2',
             lastName: 'Zimina',
             name: 'Viktoria',
             patronymic: 'Dmirtievna',
             email: 'zdmitr@yandex.ru',
-            number: 7,
+            friendIds: [],
           },
           {
+            id: 'user-3',
             lastName: 'Popov',
             name: 'Konstantin',
             patronymic: 'Mihailovich',
             email: 'PoKonst56@mail.ru',
-            number: 2,
+            friendIds: ['user-1', 'user-2'],
           },
           {
+            id: 'user-4',
             lastName: 'Lukin',
             name: 'Roman',
             patronymic: 'Vladimirovich',
             email: 'Luck12@gmail.com',
-            number: 3,
+            friendIds: ['user-1'],
           },
 
         ]
@@ -284,7 +289,12 @@ export default {
         if (this.editedIndex > -1) {
           Object.assign(this.users[this.editedIndex], this.editedItem)
         } else {
-          this.users.push(this.editedItem)
+          const newUser = {
+            ...this.editedItem,
+            friendIds: [],
+            id: `${Math.random()}`,
+          }
+          this.users.push(newUser)
         }
         this.close()
       },
